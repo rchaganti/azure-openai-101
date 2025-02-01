@@ -14,13 +14,15 @@ client = AzureOpenAI(
     azure_endpoint = os.getenv("AZURE_OPENAI_ENDPOINT_FOR_INSTRUCT")
 )
     
-start_phrase = 'What is the transformer architecture? Explain self-attention mechanism.'
+start_phrase = 'What is the transformer architecture? Explain self-attention mechanism. Provide the response in 5 bullet points.'
 response = client.completions.create(
     model=AZURE_OPENAI_DEPLOYMENT_NAME_FOR_INSTRUCT, 
     prompt=start_phrase,
     max_tokens=1000,
     stream=True
 )
+
+print(start_phrase)
 
 for chunk in response:
     if chunk.choices:
