@@ -20,9 +20,10 @@ client = AzureOpenAI(
 response = client.chat.completions.create(
     model = AZURE_OPENAI_DEPLOYMENT_NAME,
     messages=[
-        {"role": "system", "content": "You are a helpful tutor and an expert in Artificial Intelligence."},
-        {"role": "user", "content": "How do I go about learning AI application development? Give me a roadmap."},
-    ]
+        {"role": "system", "content": "You are a helpful tutor and an expert in Artificial Intelligence. When the user asks for comparison between two things, you should provide a tabular output."},
+        {"role": "user", "content": "What is the difference between OpenAI and Azure OpenAI?"},
+    ],
+    max_tokens=1000
 )
 
 #print(response.choices[0].message.content)
