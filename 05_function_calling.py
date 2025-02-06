@@ -48,7 +48,7 @@ def get_response(prompt):
     ]
 
     conversation_history = [
-        {"role": "system", "content": "You are a helpful assistant. You should use the tools provided when needed to generate a response. When asked about weather, return the response in Celsius."},
+        {"role": "system", "content": "You are a helpful assistant. You should use the tools provided when needed to generate a response. When asked about the weather, return the response in Celsius."},
         {"role": "user", "content": prompt}
     ]
 
@@ -74,8 +74,7 @@ def get_response(prompt):
             })
             for tool_call in response_message.tool_calls:
                 if tool_call.function.name == "get_weather":
-                    function_args = json.loads(tool_call.function.arguments)
-                    print(f"Function arguments: {function_args}")  
+                    function_args = json.loads(tool_call.function.arguments)                    
                     weather_response = get_weather(
                         city_name=function_args.get("city_name")
                     )
