@@ -128,7 +128,7 @@ def get_tool_response(tool_name, tool_arguments):
 
 if __name__ == "__main__":
     #question - "What's the weather like in Bengaluru next week?"
-    question = "I am going to Austin next Monday. Based on the weather, suggest what kind of cloths I need t carry."
+    question = "I am going to Austin next week. Based on the weather, suggest what kind of cloths I need to carry."
     conversation_history = [
         {"role": "system", "content": "You are a helpful assistant. You should use the tools provided when needed to generate a response."},
         {"role": "user", "content": question}
