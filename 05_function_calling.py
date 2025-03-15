@@ -3,6 +3,7 @@ import os
 from openai import AzureOpenAI
 import json
 import requests
+from datetime import datetime
 
 load_dotenv()
 
@@ -10,21 +11,35 @@ AZURE_OPENAI_API_KEY=os.getenv("AZURE_OPENAI_API_KEY")
 AZURE_OPENAI_ENDPOINT=os.getenv("AZURE_OPENAI_ENDPOINT")
 AZURE_OPENAI_DEPLOYMENT_NAME=os.getenv("AZURE_OPENAI_DEPLOYMENT_NAME")
 
-def get_weather(city_name):
-    """Get the current time for a given location"""
-    print(f"get_current_time called with location: {city_name}")  
-    city_lower = city_name.lower()
+def get_weather(city_name, date=None):
+    """
+    Get the weather at a given location on a given date or current weather.
 
-    api_key = os.getenv("OPEN_WEATHER_API_KEY")
-    base_url = "http://api.openweathermap.org/data/2.5/weather?"
-    complete_url = base_url + "appid=" + api_key + "&q=" + city_lower
+    Args:
+        city_name: The city name, e.g. Bengaluru.
+        date: Date on which the weather at the given location should be determined. This defaults to the current weather when a date is not specified.
+
+    Returns:
+        JSON string with the city name, date, and temperature.
+    """
+    api_key = os.getenv("VISUAL_CROSSING_API_KEY")
+    if date is None:
+        date = datetime.now().strftime("%Y-%m-%d")
     
-    response = requests.get(complete_url)
-    respJson = response.json()
-    return json.dumps({
-        "city_name": city_name,
-        "temparature": respJson["main"]["temp"]
-    })
+    request_url = f"https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/{city_name}/{date}?unitGroup=metric&key={api_key}&contentType=json"
+    response = requests.get(request_url)
+
+    if response.status_code != 200:
+        return json.dumps({
+            "error": "Invalid city name or date"
+        })
+    else:
+        respJson = response.json()
+        return json.dumps({
+            "city_name": city_name,
+            "date": date,
+            "temperature": respJson["days"][0]["temp"]
+        })
 
 def get_response(prompt):
     tools = [
